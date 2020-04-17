@@ -22,7 +22,10 @@ const scrapeApi = (url, page) => {
     if (!error && res.statusCode == 200) {
         // do something with JSON, using the 'body' variable
         body.results.forEach((result) => {
-          sigData[result.hex_signature] = result.text_signature;
+          sigData[result.id] = {
+            "sig":  result.hex_signature,
+            "text": result.text_signature
+          }
         });
 
         console.log(Object.keys(sigData).length);
@@ -40,7 +43,7 @@ const scrapeApi = (url, page) => {
 const finishedScraping = () => {
   delete sigData["Bytes Signature"];
   // console.log(sigData);
-  fs.writeFile("sigData.json", JSON.stringify(sigData, null, 2), (err) => {
+  fs.writeFile("sigDataApi.json", JSON.stringify(sigData, null, 2), (err) => {
     if (err) console.log(err);
     console.log("Successfully Written to File.");
   });
